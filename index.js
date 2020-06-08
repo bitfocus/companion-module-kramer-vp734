@@ -74,17 +74,6 @@ instance.prototype.config_fields = function () {
 			width: 6,
 			default: '192.168.1.39',
 			regex: self.REGEX_IP
-		},
-		//Select Model of switcher		
-		{
-			type: 'dropdown',
-			id: 'model',
-			label: 'Model',
-			default: 'VP-734',
-			choices: [
-						{ id: '0', label: 'VP-734' },
-						{ id: '1', label: 'VP-773A' }
-			]	
 		}
 	]
 };
@@ -101,15 +90,12 @@ instance.prototype.destroy = function() {
 };
 
 
-//Check the model being used
-if (self.conig.model == 'VP-734'){
-
-	instance.prototype.actions = function(system) {
+instance.prototype.actions = function(system) {
 	var self = this;
 	var actions = {
 		'menu': { label: 'Menu'},
-		'top': { label: 'Top'},
-		'down': { label: 'Down'},
+		'minus': { label: 'Minus'},
+		'plus': { label: 'Plus'},
 		'left': { label: 'Left'},
 		'right': { label: 'Right'},
 		'enter': { label: 'Enter'},
@@ -122,45 +108,60 @@ if (self.conig.model == 'VP-734'){
 					label: 'Input',
 					id: 'input',
 					choices: [
-						{ id: '0', label: 'Input 1' },
-						{ id: '1', label: 'Input 2' },
-						{ id: '2', label: 'HDMI 1' },
-						{ id: '3', label: 'HDMI 2' },
-						{ id: '4', label: 'HDMI 3' },
-						{ id: '5', label: 'HDMI 4' },
-						{ id: '6', label: 'DP 1' }
+						{ id: '13', label: 'HDMI 1' },
+						{ id: '14', label: 'HDMI 2' },
+						{ id: '10', label: 'HDMI 3' },
+						{ id: '15', label: 'HDMI 4' },
+						{ id: '11', label: 'PC 1' },
+						{ id: '12', label: 'PC 2' },
+						{ id: '9', label: 'CV' },
+						{ id: '16', label: 'DP' }
 					]
 				}
 			]
 		},
-		'source_type_input1': {
-			label: 'Source type input 1',
+		'display_mode': {
+			label: 'Dispaly Mode',
 			options: [
 				{
 					type: 'dropdown',
-					label: 'Type',
-					id: 'scrType',
+					label: 'Mode',
+					id: 'mode',
 					choices: [
-						{ id: '0', label: 'VGA' },
-						{ id: '1', label: 'Component' },
-						{ id: '2', label: 'YC' },
-						{ id: '3', label: 'Video' }
+						{ id: '0', label: 'Single Window' },
+						{ id: '1', label: 'Picture in Picture' },
+						{ id: '2', label: 'Picture + Picture' },
+						{ id: '3', label: 'Split' },
+						{ id: '4', label: 'Customized' },
 					]
 				}
 			]
 		},
-		'source_type_input2': {
-			label: 'Source type input 2',
+		'no_signal': {
+			label: 'No Signal',
 			options: [
 				{
 					type: 'dropdown',
-					label: 'Type',
-					id: 'scrType',
+					label: 'Colour',
+					id: 'colour',
 					choices: [
-						{ id: '0', label: 'VGA' },
-						{ id: '1', label: 'Component' },
-						{ id: '2', label: 'YC' },
-						{ id: '3', label: 'Video' }
+						{ id: '0', label: 'Grey' },
+						{ id: '1', label: 'Blue' },
+						{ id: '2', label: 'Black' },
+					]
+				}
+			]
+		},
+		'window_control': {
+			label: 'Window Control',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Window',
+					id: 'window',
+					choices: [
+						{ id: '0', label: 'Main Window' },
+						{ id: '1', label: 'PiP Window' },
 					]
 				}
 			]
@@ -193,13 +194,13 @@ if (self.conig.model == 'VP-734'){
 				}
 			]
 		},
-		'mute': {
-			label: 'Mute',
+		'hdcp_mode': {
+			label: 'HDCP Mode',
 			options: [
 				{
 					type: 'dropdown',
-					label: 'Mute on/off',
-					id: 'muteId',
+					label: 'HDCP on/off',
+					id: 'hdcp',
 					choices: [
 						{ id: '0', label: 'Off' },
 						{ id: '1', label: 'On' },
@@ -207,13 +208,13 @@ if (self.conig.model == 'VP-734'){
 				}
 			]
 		},
-		'autoswitch': {
-			label: 'Auto switch input source',
+		'mute': {
+			label: 'Mute',
 			options: [
 				{
 					type: 'dropdown',
-					label: 'Autoswitch on/off',
-					id: 'autoswitchId',
+					label: 'Mute on/off',
+					id: 'muteId',
 					choices: [
 						{ id: '0', label: 'Off' },
 						{ id: '1', label: 'On' },
@@ -233,7 +234,7 @@ if (self.conig.model == 'VP-734'){
 	};
 
 	self.setActions(actions);
-	};
+};
 
 
 
@@ -247,55 +248,55 @@ if (self.conig.model == 'VP-734'){
 		switch (id) {
 
 			case 'menu':
-				cmd = 'Y 0 0';
+				cmd = '#Y 0,10,0';
 				break;
 
-			case 'top':
-				cmd = 'Y 0 1';
+			case 'minus':
+				cmd = '#Y 0,12,0';
 				break;
 
-			case 'down':
-				cmd = 'Y 0 2';
+			case 'plus':
+				cmd = '#Y 0,13,0';
 				break;
 
 			case 'left':
-				cmd = 'Y 0 3';
+				cmd = '#Y 0,39,0';
 				break;
 
 			case 'right':
-				cmd = 'Y 0 4';
+				cmd = '#Y 0,40,0';
 				break;
 
 			case 'enter':
-				cmd = 'Y 0 5';
+				cmd = '#Y 0,11,0';
 				break;
 
 			case 'freeze':
-				cmd = 'Y 0 9 ' + opt.frzId;
+				cmd = '#Y 0,741,' + opt.frzId;
 				break;
 
 			case 'blank':
-				cmd = 'Y 0 8 ' + opt.blankId;
+				cmd = '#Y 0,742,' + opt.blankId;
 				break;
 
 			case 'switch_input':
-				cmd = 'Y 0 30 '+ opt.input;
+				cmd = '#Y 0,120,' + opt.input;
 				break;
+
+			case 'display_mode':
+				cmd = '#Y 0,110,' + opt.mode;
+				break;		
+
+			case 'no_signal':
+				cmd = '#Y 0,735,' + opt.colour;
+				break;
+
+			case 'window_control':
+				cmd = '#Y 0,721,' + opt.window;
+				break;	
 
 			case 'mute':
-				cmd = 'Y 0 11 ' + opt.muteId;
-				break;
-
-			case 'autoswitch':
-				cmd = 'Y 0 31 ' + opt.autoswitchId;
-				break;
-
-			case 'source_type_input1':
-				cmd = 'Y 0 32 ' + opt.scrType;
-				break;
-
-			case 'source_type_input2':
-				cmd = 'Y 0 33 ' + opt.scrType;
+				cmd = '#Y 0,743,' + opt.muteId;
 				break;
 
 			case 'command':
@@ -304,103 +305,19 @@ if (self.conig.model == 'VP-734'){
 
 	}
 
-		if (cmd !== undefined) {
+	if (cmd !== undefined) {
 
 		debug('sending ',cmd,"to",self.config.host);
 
 		if (self.socket !== undefined && self.socket.connected) {
-			self.socket.send(cmd + '\n');
+			self.socket.send(cmd + '\r');
 		} else {
 			debug('Socket not connected :(');
 		}
-
-		}
-
-	};
-}
-else 
-	if (self.conig.model == 'VP-773A'){
-		instance.prototype.actions = function(system) {
-	var self = this;
-	var actions = {
-
-		'switch_input': {
-			label: 'Switch input',
-			options: [
-				{
-					type: 'dropdown',
-					label: 'Input',
-					id: 'input',
-					choices: [
-						{ id: '23', label: 'HDMI 1' },
-						{ id: '24', label: 'HDMI 2' },
-						{ id: '20', label: 'HDMI 3' },
-						{ id: '25', label: 'HDMI 4' },
-						{ id: '21', label: 'PC 1' },
-						{ id: '22', label: 'PC 2' },
-						{ id: '19', l25bel: 'CV 1' },
-						{ id: '26', label: 'DP 1' }
-					]
-				}
-			]
-		},
-		'blank': {label: 'Blank Output'},
-		'freeze': {label: 'Freeze Output'},
-		'mute': {label: 'Mute'},
-		'lock': {label: 'Lock Panel'}
-		
-	};
-
-	self.setActions(actions);
-	};
-
-
-
-
-	instance.prototype.action = function(action) {
-		var self = this;
-		var opt = action.options;
-		var id = action.action;
-		var cmd;
-
-		switch (id) {
-
-			case 'switch_input':
-				cmd = '#Y 0,'+ opt.input ',0';
-				break;
-
-			case 'blank':
-				cmd = '#Y 0,16,0';
-				break;
-
-			case 'freeze':
-				cmd = '#Y 0,17,0';
-				break;
-
-			case 'mute':
-				cmd = '#Y 0,37,0';
-				break;
-
-			case 'lock':
-				cmd = '#Y 0,18,0';
-				break;
 
 	}
 
-		if (cmd !== undefined) {
-
-		debug('sending ',cmd,"to",self.config.host);
-
-		if (self.socket !== undefined && self.socket.connected) {
-			self.socket.send(cmd + '\n');
-		} else {
-			debug('Socket not connected :(');
-		}
-
-		}
-
-	};
-}
+};
 
 instance_skel.extendedBy(instance);
 exports = module.exports = instance;
