@@ -74,6 +74,17 @@ instance.prototype.config_fields = function () {
 			width: 6,
 			default: '192.168.1.39',
 			regex: self.REGEX_IP
+		},
+		//Select Model of switcher		
+		{
+			type: 'dropdown',
+			id: 'model',
+			label: 'Model',
+			default: 'VP-734',
+			choices: [
+						{ id: '0', label: 'VP-734' },
+						{ id: '1', label: 'VP-773A' }
+			]	
 		}
 	]
 };
@@ -90,7 +101,10 @@ instance.prototype.destroy = function() {
 };
 
 
-instance.prototype.actions = function(system) {
+//Check the model being used
+if (self.conig.model == 'VP-734'){
+
+	instance.prototype.actions = function(system) {
 	var self = this;
 	var actions = {
 		'menu': { label: 'Menu'},
@@ -219,7 +233,7 @@ instance.prototype.actions = function(system) {
 	};
 
 	self.setActions(actions);
-};
+	};
 
 
 
@@ -290,7 +304,7 @@ instance.prototype.actions = function(system) {
 
 	}
 
-	if (cmd !== undefined) {
+		if (cmd !== undefined) {
 
 		debug('sending ',cmd,"to",self.config.host);
 
@@ -300,9 +314,93 @@ instance.prototype.actions = function(system) {
 			debug('Socket not connected :(');
 		}
 
+		}
+
+	};
+}
+else 
+	if (self.conig.model == 'VP-773A'){
+		instance.prototype.actions = function(system) {
+	var self = this;
+	var actions = {
+
+		'switch_input': {
+			label: 'Switch input',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Input',
+					id: 'input',
+					choices: [
+						{ id: '23', label: 'HDMI 1' },
+						{ id: '24', label: 'HDMI 2' },
+						{ id: '20', label: 'HDMI 3' },
+						{ id: '25', label: 'HDMI 4' },
+						{ id: '21', label: 'PC 1' },
+						{ id: '22', label: 'PC 2' },
+						{ id: '19', l25bel: 'CV 1' },
+						{ id: '26', label: 'DP 1' }
+					]
+				}
+			]
+		},
+		'blank': {label: 'Blank Output'},
+		'freeze': {label: 'Freeze Output'},
+		'mute': {label: 'Mute'},
+		'lock': {label: 'Lock Panel'}
+		
+	};
+
+	self.setActions(actions);
+	};
+
+
+
+
+	instance.prototype.action = function(action) {
+		var self = this;
+		var opt = action.options;
+		var id = action.action;
+		var cmd;
+
+		switch (id) {
+
+			case 'switch_input':
+				cmd = '#Y 0,'+ opt.input ',0';
+				break;
+
+			case 'blank':
+				cmd = '#Y 0,16,0';
+				break;
+
+			case 'freeze':
+				cmd = '#Y 0,17,0';
+				break;
+
+			case 'mute':
+				cmd = '#Y 0,37,0';
+				break;
+
+			case 'lock':
+				cmd = '#Y 0,18,0';
+				break;
+
 	}
 
-};
+		if (cmd !== undefined) {
+
+		debug('sending ',cmd,"to",self.config.host);
+
+		if (self.socket !== undefined && self.socket.connected) {
+			self.socket.send(cmd + '\n');
+		} else {
+			debug('Socket not connected :(');
+		}
+
+		}
+
+	};
+}
 
 instance_skel.extendedBy(instance);
 exports = module.exports = instance;
