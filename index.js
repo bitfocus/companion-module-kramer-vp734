@@ -272,31 +272,31 @@ instance.prototype.actions = function(system) {
 				break;
 
 			case 'freeze':
-				cmd = '#Y 0,741,' + opt.frzId;
+				cmd = '#Y 0,741,' + opt.frzId + '';
 				break;
 
 			case 'blank':
-				cmd = '#Y 0,742,' + opt.blankId;
+				cmd = '#Y 0,742,' + opt.blankId + '';
 				break;
 
 			case 'switch_input':
-				cmd = '#Y 0,120,' + opt.input;
+				cmd = '#Y 0,120,' + opt.input + '';
 				break;
 
 			case 'display_mode':
-				cmd = '#Y 0,110,' + opt.mode;
+				cmd = '#Y 0,110,' + opt.mode + '';
 				break;		
 
 			case 'no_signal':
-				cmd = '#Y 0,735,' + opt.colour;
+				cmd = '#Y 0,735,' + opt.colour + '';
 				break;
 
 			case 'window_control':
-				cmd = '#Y 0,721,' + opt.window;
+				cmd = '#Y 0,721,' + opt.window + '';
 				break;	
 
 			case 'mute':
-				cmd = '#Y 0,743,' + opt.muteId;
+				cmd = '#Y 0,743,' + opt.muteId + '';
 				break;
 
 			case 'command':
