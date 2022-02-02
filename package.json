@@ -14,6 +14,13 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Jeffrey Davidsz <jeffrey.davidsz@vicreo.eu>",
-	"homepage": "https://www.kramerav.com/Product/VP-734",
-	"license": "MIT"
+	"homepage": "https://github.com/bitfocus/companion-module-kramer-vp734#readme",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-kramer-vp734/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-kramer-vp734.git"
+	}
 }
